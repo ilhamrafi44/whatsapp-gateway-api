@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 EventEmitter.defaultMaxListeners = 50;
 
 // ✅ Imports
-import { Boom } from '@hapi/boom'
+// import { Boom } from '@hapi/boom'
 const makeWASocket = require('@whiskeysockets/baileys').default;
 const { useMultiFileAuthState, Browsers, makeInMemoryStore } = require('@whiskeysockets/baileys');
 const QRCode = require('qrcode');
@@ -15,16 +15,18 @@ const cors = require('cors');
 const { Server } = require('socket.io');
 const http = require('http');
 const fs = require('fs');
+const WebSocket = require('ws');
 
 // ✅ Setup
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: 'http://localhost:5173',
-        methods: ['GET', 'POST'],
-    }
-});
+const wss = new WebSocket.Server({ port: 8080 });
+// const io = new Server(server, {
+//     cors: {
+//         origin: 'http://localhost:5173',
+//         methods: ['GET', 'POST'],
+//     }
+// });
 
 // ✅ Middleware
 app.use(bodyParser.json({ limit: '10mb' }));
@@ -46,8 +48,13 @@ async function startWhatsApp() {
     const authFolder = './auth_info_baileys';
 
     if (!fs.existsSync(authFolder)) {
-        console.log('🛠️ Auth folder missing. Creating a fresh session...');
-        fs.mkdirSync(authFolder);
+        try {
+            fs.mkdirSync(authFolder);
+            console.log('🛠️ Auth folder created successfully.');
+        } catch (error) {
+            console.error('❌ Failed to create auth folder:', error.message);
+            return;
+        }
     }
 
     const { state, saveCreds } = await useMultiFileAuthState(authFolder);
@@ -78,13 +85,20 @@ async function startWhatsApp() {
             const { connection, lastDisconnect, qr } = update;
 
             if (qr) {
-                sock.qr = qr;
+                currentQR = qr;
                 QRCode.toDataURL(qr).then((qrDataUrl) => {
-                    io.emit('qr', qrDataUrl); // Emit QR Code in real-time
+                    currentQR = qrDataUrl;
+                    wss.clients.forEach(client => {
+                        if (client.readyState === WebSocket.OPEN) {
+                            client.send(JSON.stringify({ event: 'qr', data: qrDataUrl }));
+                        }
+                    });
                 });
             } else {
-                sock.qr = null; // Clear QR when not available
+                currentQR = null; // Reset QR when not available
             }
+
+
 
             if (connection === 'open') {
                 console.log('✅ WhatsApp Connected');
@@ -94,14 +108,35 @@ async function startWhatsApp() {
                         name: sock?.user?.name || 'Unknown Device'
                     });
                 }
-                io.emit('status', { status: 'connected', devices: connectedDevices });
+                wss.clients.forEach(client => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        const timeout = setTimeout(() => {
+                            client.terminate();
+                            console.log('❌ Terminated slow WebSocket client.');
+                        }, 5000); // Timeout in milliseconds
+
+                        client.send(JSON.stringify({ event: 'status', data: { status: 'connected', devices: connectedDevices } }), () => {
+                            clearTimeout(timeout); // Clear timeout on successful send
+                        });
+                    }
+                });
             } else if (connection === 'close') {
                 const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== 401;
-                console.log('❌ Connection Closed. Reconnecting...', shouldReconnect);
+                console.log('❌ Connection Closed. Reconnecting...');
 
-                // Remove device on disconnect
                 connectedDevices = connectedDevices.filter(device => device.id !== sock?.user?.id);
-                io.emit('status', { status: 'disconnected', devices: connectedDevices });
+                wss.clients.forEach(client => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        const timeout = setTimeout(() => {
+                            client.terminate();
+                            console.log('❌ Terminated slow WebSocket client.');
+                        }, 5000); // Timeout in milliseconds
+
+                        client.send(JSON.stringify({ event: 'status', data: { status: 'connected', devices: connectedDevices } }), () => {
+                            clearTimeout(timeout); // Clear timeout on successful send
+                        });
+                    }
+                });
 
                 if (shouldReconnect) {
                     setTimeout(startWhatsApp, 5000); // Retry after 5 seconds
@@ -109,6 +144,7 @@ async function startWhatsApp() {
                     console.log('🚫 Logged out. Manual intervention required.');
                 }
             }
+
         });
 
         // ✅ Message Event Handling
@@ -128,26 +164,30 @@ async function startWhatsApp() {
 
 
 // ✅ Socket.IO Event Listeners
-io.on('connection', (socket) => {
-    console.log('✅ A user connected:', socket.id);
+wss.on('connection', (ws) => {
+    console.log('✅ A user connected');
 
-    socket.on('disconnect', () => {
-        console.log('❌ User disconnected:', socket.id);
-    });
+    // Send initial status
+    ws.send(JSON.stringify({
+        event: 'status',
+        data: { status: sock?.user ? 'connected' : 'disconnected', devices: connectedDevices }
+    }));
 
-    // Send Initial Status
-    socket.emit('status', {
-        status: sock?.user ? 'connected' : 'disconnected',
-        devices: connectedDevices,
-    });
-
-    // Send Current QR Code
+    // Send current QR if available
     if (currentQR) {
-        QRCode.toDataURL(currentQR).then((qrDataUrl) => {
-            socket.emit('qr', qrDataUrl);
-        });
+        ws.send(JSON.stringify({ event: 'qr', data: currentQR }));
     }
+
+    ws.on('close', () => {
+        console.log('❌ User disconnected');
+    });
+
+    ws.on('error', (err) => {
+        console.error('❌ WebSocket error:', err.message);
+    });
 });
+
+
 
 // ✅ API Endpoints
 app.get('/devices', (req, res) => {
@@ -157,7 +197,7 @@ app.get('/devices', (req, res) => {
 app.delete('/devices/:id', (req, res) => {
     const { id } = req.params;
     connectedDevices = connectedDevices.filter(device => device.id !== id);
-    io.emit('status', { status: 'device_removed', devices: connectedDevices });
+    // io.emit('status', { status: 'device_removed', devices: connectedDevices });
     res.json({ status: 'success', message: `Device ${id} removed` });
 });
 
@@ -176,18 +216,13 @@ app.post('/send-notification', async (req, res) => {
     }
 });
 
-app.get('/qr', async (req, res) => {
+app.get('/qr', (req, res) => {
     if (!currentQR) {
-        return res.json({ status: 'pending', message: 'QR code is not available at the moment' });
+        return res.status(404).json({ status: 'error', message: 'QR code is not available' });
     }
-
-    try {
-        const qrImage = await QRCode.toDataURL(currentQR);
-        res.json({ status: 'qr', qr: qrImage });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to generate QR Code' });
-    }
+    res.json({ status: 'success', qr: currentQR });
 });
+
 
 // ✅ Logout Endpoint
 app.post('/logout', async (req, res) => {
@@ -202,13 +237,21 @@ app.post('/logout', async (req, res) => {
             fs.rmSync('./auth_info_baileys', { recursive: true, force: true });
             console.log('🗑️ Auth folder cleared.');
 
-            connectedDevices = connectedDevices.filter(device => device.id !== sock?.user?.id);
+            connectedDevices = [];
+            currentQR = null;
 
-            io.emit('status', { status: 'disconnected', devices: connectedDevices });
+            wss.clients.forEach(client => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({
+                        event: 'status',
+                        data: { status: 'disconnected', devices: connectedDevices }
+                    }));
+                }
+            });
 
             await startWhatsApp();
 
-            res.json({ status: 'success', message: 'Successfully logged out from WhatsApp and restarted connection.' });
+            res.json({ status: 'success', message: 'Successfully logged out and restarted WhatsApp connection.' });
         } else {
             res.status(500).json({ error: 'WhatsApp client is not initialized' });
         }
@@ -217,6 +260,7 @@ app.post('/logout', async (req, res) => {
         res.status(500).json({ error: 'Failed to logout from WhatsApp', details: error.message });
     }
 });
+
 
 
 
