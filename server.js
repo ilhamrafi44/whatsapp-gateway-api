@@ -12,15 +12,18 @@ const bodyParser = require('body-parser');
 const P = require('pino');
 const NodeCache = require('node-cache');
 const cors = require('cors');
-const { Server } = require('socket.io');
-const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const WebSocket = require('ws');
 
 // ✅ Setup
 const app = express();
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ port: 8080 });
+const server = https.createServer(app);
+const wss = new WebSocket.Server({ server });
+// const wss = new WebSocket.Server({
+//   port: process.env.PORT || 3000, // Ensure this port matches the one set in cPanel
+//   host: 'https://wa.coffeelabs.id', // Your domain
+// });
 // const io = new Server(server, {
 //     cors: {
 //         origin: 'http://localhost:5173',
@@ -32,10 +35,16 @@ const wss = new WebSocket.Server({ port: 8080 });
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+  origin: 'https://wa.coffeelabs.id',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+app.use(cors({
+  origin: ['https://localhost:5173'], // Allow Vue local dev server
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 
 const store = makeInMemoryStore({ logger: P({ level: 'silent' }) });
 
