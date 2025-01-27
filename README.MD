@@ -1,88 +1,80 @@
-WhatsApp Management Dashboard
-Project by Muhammad Ilham Rafiannandha
-LinkedIn: https://linkedin.com/in/ilhamrafi44
-Overview
-The WhatsApp Management Dashboard is a web-based platform that provides a comprehensive way to manage WhatsApp instances, connected devices, send notifications, and monitor server logs and status in real-time.
-This is the first stable release, and the project is still ongoing. Contributions and forks are welcome!
-Features
-- QR Code Scanning: Generate and refresh QR codes for WhatsApp connections.
-- Device Management: View and remove connected devices.
-- Notifications: Send text notifications via WhatsApp to any number.
-- Real-Time Status: Monitor server uptime, WebSocket connections, and memory usage.
-- Logs Management: Fetch and view server logs dynamically.
-- Authentication: Secure login with session-based management.
-Built With
-- Node.js: Backend server environment.
-- Express.js: Web framework for building the server.
-- EJS: Embedded JavaScript templates for dynamic rendering.
-- Bootstrap: Frontend styling for a responsive and professional look.
-- Baileys: WhatsApp Web API library.
-- SweetAlert2: For interactive modals and alerts.
-- WebSocket: Real-time communication with the dashboard.
-- Pino: Lightweight logger for Node.js.
-- bcrypt: Password hashing for secure authentication.
-Requirements
-- Node.js: v16+
-- npm: v7+
-- A VPS or Shared Hosting Environment
-Installation
-Clone this repository:
+## WhatsApp Management Dashboard
+A comprehensive application designed to manage WhatsApp connections, send notifications, and monitor server activities. This project is built with Node.js, Express, and Baileys library for WhatsApp Web API integration.
 
-   ```bash
-   git clone https://github.com/ilhamrafi44/whatsapp-management-dashboard.git
-   cd whatsapp-management-dashboard
-   ```
-Install dependencies:
+## Documentation
+[Documentation](https://github.com/ilhamrafi44/whatsapp-gateway-api)
 
-   ```bash
-   npm install
-   ```
-Create a `.env` file and configure the following:
+## Badges
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
-   ```env
-   PORT=3000
-   SESSION_SECRET=your-secret-key
-   ```
-Start the server:
+## Authors
+Project by [Muhammad Ilham Rafiannandha](https://linkedin.com/in/ilhamrafi44).
 
-   ```bash
-   npm start
-   ```
-Access the dashboard:
+## Appendix
+This project is under active development, and contributions are welcome.
 
-   Open `http://localhost:3000` in your browser.
-Deployment
-Local Deployment
-- Follow the installation steps above.
-- Use a tool like **ngrok** to expose your local server publicly for testing.
-VPS Deployment
-Install Node.js and npm on your VPS.
-Clone the repository and follow the installation steps.
-Use **PM2** to keep the server running:
+## Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/ilhamrafi44/whatsapp-gateway-api
+```
+2. Navigate to the project directory:
+```bash
+cd whatsapp-gateway-api
+```
+3. Install dependencies:
+```bash
+npm install
+```
+4. Start the server:
+```bash
+node server.js
+```
+## Deployment
+### Local Environment:
+1. Ensure Node.js and npm are installed.
+2. Follow the installation steps above.
 
-   ```bash
-   npm install -g pm2
-   pm2 start server.js --name whatsapp-dashboard
-   pm2 save
-   ```
-Set up NGINX as a reverse proxy for better performance and HTTPS.
-Shared Hosting
-If your hosting supports Node.js applications, upload the project directory and configure the `PORT` and session secret.
-API Endpoints
-Authentication
-- POST /login: Log in with email and password.
-- POST /logout-user: Log out the user.
-Dashboard
-- GET /dashboard: Access the main dashboard.
-- GET /qr: Fetch the current QR code.
-Notifications
-- POST /send-notification: Send a WhatsApp notification.
-Logs & Status
-- GET /api/server-status: Fetch server uptime, memory usage, and WebSocket connections.
-- GET /api/server-logs: Fetch recent server logs.
-Contributing
-Contributions are welcome! Feel free to fork this repository and create pull requests.
-License
-This project is licensed under the MIT License.
-Contact
-For inquiries or support, connect with me on [LinkedIn](https://linkedin.com/in/ilhamrafi44).
+### VPS Deployment:
+1. Set up a VPS with Node.js.
+2. Clone the repository to the server.
+3. Install dependencies and configure the environment.
+4. Use a process manager like PM2 for server stability:
+```bash
+pm2 start server.js
+```
+
+### Shared Hosting:
+1. Use a hosting provider that supports Node.js.
+2. Upload the project and configure the environment variables.
+3. Start the server.
+
+## API Reference
+#### Get QR Code:
+```http
+GET /qr
+```
+Response:
+```json
+{ "qr": "<QR Code URL>" }
+```
+#### Send Notification:
+```http
+POST /send-notification
+```
+Body:
+```json
+{ "phoneNumber": "<number>", "message": "<message>" }
+```
+## Acknowledgements
+Special thanks to:
+- [Baileys Library](https://github.com/WhiskeySockets/Baileys)
+
+## FAQ
+### What is this project for?
+This project manages WhatsApp connections and notifications.
+
+### Can I contribute?
+Yes, contributions are welcome. Fork the repository and submit a pull request.
