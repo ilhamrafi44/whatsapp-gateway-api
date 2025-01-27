@@ -1,53 +1,88 @@
 WhatsApp Management Dashboard
-A comprehensive WhatsApp management tool for real-time monitoring, message sending, and session control. Built with **Node.js**, **Express.js**, **WebSocket**, and **Baileys**, this application offers features such as QR code generation, device management, server monitoring, and authentication.
-Project Details
-- **Author**: [Muhammad Ilham Rafiannandha](https://linkedin.com/in/ilhamrafi44)
-- **Status**: First stable release (ongoing development)
-- **Purpose**: To provide a user-friendly dashboard for managing WhatsApp connections and automating basic WhatsApp messaging tasks.
+Project by Muhammad Ilham Rafiannandha
+LinkedIn: https://linkedin.com/in/ilhamrafi44
+Overview
+The WhatsApp Management Dashboard is a web-based platform that provides a comprehensive way to manage WhatsApp instances, connected devices, send notifications, and monitor server logs and status in real-time.
+This is the first stable release, and the project is still ongoing. Contributions and forks are welcome!
 Features
-1. Real-Time Dashboard:
-- Live updates using WebSocket.
-- QR code generation for WhatsApp authentication.
-1. Device Management:
-- Add/remove connected devices.
-- View live session details.
-1. Message Automation:
-- Send WhatsApp messages directly from the dashboard.
-- Simple UI for sending notifications.
-1. Server Monitoring:
-- View uptime, load averages, memory usage, and WebSocket connections.
-- Real-time server logs.
+- QR Code Scanning: Generate and refresh QR codes for WhatsApp connections.
+- Device Management: View and remove connected devices.
+- Notifications: Send text notifications via WhatsApp to any number.
+- Real-Time Status: Monitor server uptime, WebSocket connections, and memory usage.
+- Logs Management: Fetch and view server logs dynamically.
+- Authentication: Secure login with session-based management.
 Built With
-Node.js - Backend framework.
-Express.js - For routing and API handling.
-WebSocket - Real-time updates.
-Baileys - WhatsApp Web API.
-EJS - Template rendering for views.
-SweetAlert2 - Beautiful alert messages.
-Bootstrap 5 - Responsive frontend design.
-Getting Started
-Follow these instructions to set up and run the project locally, on shared hosting, or a VPS.
-Prerequisites
-- Node.js (v16 or higher)
-- npm (Node Package Manager)
-- A WhatsApp account for testing
-- An Ubuntu-based VPS or shared hosting environment if deploying.
+- Node.js: Backend server environment.
+- Express.js: Web framework for building the server.
+- EJS: Embedded JavaScript templates for dynamic rendering.
+- Bootstrap: Frontend styling for a responsive and professional look.
+- Baileys: WhatsApp Web API library.
+- SweetAlert2: For interactive modals and alerts.
+- WebSocket: Real-time communication with the dashboard.
+- Pino: Lightweight logger for Node.js.
+- bcrypt: Password hashing for secure authentication.
+Requirements
+- Node.js: v16+
+- npm: v7+
+- A VPS or Shared Hosting Environment
 Installation
-1. Clone the repository: `git clone <repository_url>`
-2. Navigate to the project directory: `cd whatsapp-dashboard`
-3. Install dependencies: `npm install`
-4. Start the application: `node server.js`
-5. Access the dashboard at `http://localhost:3000`.
+Clone this repository:
+
+   ```bash
+   git clone https://github.com/ilhamrafi44/whatsapp-management-dashboard.git
+   cd whatsapp-management-dashboard
+   ```
+Install dependencies:
+
+   ```bash
+   npm install
+   ```
+Create a `.env` file and configure the following:
+
+   ```env
+   PORT=3000
+   SESSION_SECRET=your-secret-key
+   ```
+Start the server:
+
+   ```bash
+   npm start
+   ```
+Access the dashboard:
+
+   Open `http://localhost:3000` in your browser.
 Deployment
-### On VPS or Dedicated Server:
-1. Install Node.js and npm.
-2. Clone the repository and install dependencies.
-3. Use a process manager like PM2 to keep the app running.
-4. Configure your domain and reverse proxy using NGINX or Apache.
-5. Secure the app with SSL/TLS certificates (e.g., Let's Encrypt).
-### On Shared Hosting:
-Shared hosting may not directly support Node.js. Use services like cPanel with Node.js support or switch to VPS.
-Usage
-Once deployed, login using the provided credentials (`admin@whatsapp.com` / `admin123`). Navigate through the dashboard to manage connected devices, send messages, and monitor server status.
+Local Deployment
+- Follow the installation steps above.
+- Use a tool like **ngrok** to expose your local server publicly for testing.
+VPS Deployment
+Install Node.js and npm on your VPS.
+Clone the repository and follow the installation steps.
+Use **PM2** to keep the server running:
+
+   ```bash
+   npm install -g pm2
+   pm2 start server.js --name whatsapp-dashboard
+   pm2 save
+   ```
+Set up NGINX as a reverse proxy for better performance and HTTPS.
+Shared Hosting
+If your hosting supports Node.js applications, upload the project directory and configure the `PORT` and session secret.
+API Endpoints
+Authentication
+- POST /login: Log in with email and password.
+- POST /logout-user: Log out the user.
+Dashboard
+- GET /dashboard: Access the main dashboard.
+- GET /qr: Fetch the current QR code.
+Notifications
+- POST /send-notification: Send a WhatsApp notification.
+Logs & Status
+- GET /api/server-status: Fetch server uptime, memory usage, and WebSocket connections.
+- GET /api/server-logs: Fetch recent server logs.
+Contributing
+Contributions are welcome! Feel free to fork this repository and create pull requests.
 License
 This project is licensed under the MIT License.
+Contact
+For inquiries or support, connect with me on [LinkedIn](https://linkedin.com/in/ilhamrafi44).
