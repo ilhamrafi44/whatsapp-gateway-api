@@ -1,16 +1,12 @@
 ## WhatsApp Management Dashboard
 A comprehensive application designed to manage WhatsApp connections, send notifications, and monitor server activities. This project is built with Node.js, Express, and Baileys library for WhatsApp Web API integration.
-
-## Documentation
-[Documentation](https://github.com/ilhamrafi44/whatsapp-gateway-api)
-
-## Badges
+##
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 ## Authors
 Project by [Muhammad Ilham Rafiannandha](https://linkedin.com/in/ilhamrafi44).
 
-## Appendix
+##
 This project is under active development, and contributions are welcome.
 
 ## Installation
