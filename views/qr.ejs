@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>WhatsApp QR Code</h1>
+  <% if (qr) { %>
+    <img src="<%= qr %>" alt="QR Code" style="display: block; margin: 0 auto;" />
+  <% } else { %>
+    <p class="alert">QR Code is not available. Try refreshing.</p>
+  <% } %>
+  <button onclick="location.reload()">Refresh QR Code</button>
+</div>

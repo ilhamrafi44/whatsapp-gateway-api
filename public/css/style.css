@@ -1,0 +1,89 @@
+body {
+      background: linear-gradient(to right, #141e30, #243b55);
+      color: #e6e6e6;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h1, h5 {
+      color: #ffffff;
+    }
+
+    .card {
+      background-color: #1e2a38;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-body {
+      color: #d1d1d1;
+    }
+
+    .btn {
+      border-radius: 50px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #56ccf2, #2f80ed);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(to right, #2f80ed, #56ccf2);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(to right, #667eea, #764ba2);
+      border: none;
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(to right, #764ba2, #667eea);
+    }
+
+    .btn-danger {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background: linear-gradient(to right, #ff7eb3, #ff758c);
+    }
+
+    .list-group-item {
+      background-color: #1e2a38;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .list-group-item button {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      border: none;
+      border-radius: 50px;
+      color: white;
+    }
+
+    .modal-content {
+      background-color: #1e2a38;
+      color: #e6e6e6;
+    }
+
+    .modal-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #qr-code {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }

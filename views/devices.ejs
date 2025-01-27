@@ -1,0 +1,27 @@
+<div class="container">
+  <h1>Connected Devices</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Device ID</th>
+        <th>Device Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% devices.forEach((device, index) => { %>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><%= device.id %></td>
+          <td><%= device.name %></td>
+          <td>
+            <form action="/devices/<%= device.id %>" method="POST">
+              <button type="submit">Remove</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
