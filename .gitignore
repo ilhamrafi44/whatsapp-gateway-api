@@ -38,3 +38,9 @@ temp/
 
 # Windows specific files
 Thumbs.db
+
+
+# CERT
+cert.pem
+fullchain.pem
+privkey.pem
