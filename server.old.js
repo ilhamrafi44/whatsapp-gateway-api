@@ -13,7 +13,7 @@ const WebSocket = require('ws');
 const QRCode = require('qrcode');
 const P = require('pino');
 const axios = require('axios');
-const { makeWASocket, useMultiFileAuthState, Browsers, makeInMemoryStore } = require('@whiskeysockets/baileys');
+const { makeWASocket, useMultiFileAuthState, Browsers } = require('@whiskeysockets/baileys');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const os = require('os');
@@ -32,7 +32,7 @@ app.use(
     secret: 'your-secret-key', // Replace with a strong secret in production
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Set `secure: true` if using HTTPS
+    cookie: { secure: true }, // Set `secure: true` if using HTTPS
   })
 );
 
@@ -40,8 +40,8 @@ app.use(
 const users = [
   {
     id: 1,
-    email: 'admin@whatsapp.com',
-    password: bcrypt.hashSync('admin123', 10), // Replace with a stronger password
+    email: 'connect@ptlidiadandy.com',
+    password: bcrypt.hashSync('@Dandy#2025', 10), // Replace with a stronger password
   },
 ];
 
@@ -66,7 +66,7 @@ const wss = new WebSocket.Server({ server });
 
 // ✅ Global State
 const authFolder = path.join(__dirname, 'auth_info_baileys');
-const store = makeInMemoryStore({ logger: P({ level: 'silent' }) });
+// const store = ({ logger: P({ level: 'silent' }) });
 let sock;
 let connectedDevices = [];
 let currentQR = null;
@@ -88,7 +88,7 @@ async function startWhatsApp() {
       syncFullHistory: true,
     });
 
-    store.bind(sock.ev);
+    // store.bind(sock.ev);
     sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on('connection.update', ({ connection, lastDisconnect, qr }) => {

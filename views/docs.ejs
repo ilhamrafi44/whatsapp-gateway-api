@@ -3,200 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>WhatsApp Gateway - API Documentation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  <title>Server Documentation</title>
   <style>
     body {
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      color: #e6e6e6;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1f4037, #99f2c8);
+      color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+      padding-bottom: 100px;
     }
-
-    h1, h2 {
-      color: #ffffff;
+    h1, h2, h5, p, li, code, pre {
+      color: #f8f9fa;
     }
-
     .card {
-      background-color: #1e2a38;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-      margin-bottom: 1.5rem;
-    }
-
-    .card-header {
-      background: linear-gradient(to right, #667eea, #764ba2);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      color: white;
-    }
-
-    pre {
       background-color: #2c3e50;
-      color: #ecf0f1;
-      padding: 15px;
-      border-radius: 5px;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .card-header {
+      background: linear-gradient(to right, #00b09b, #96c93d);
+      color: #fff;
+      font-weight: bold;
+    }
+    pre {
+      background: #1e272e;
+      padding: 1rem;
+      border-radius: 8px;
       overflow-x: auto;
     }
-
-    .btn {
-      border-radius: 50px;
-    }
-
-    .btn-primary {
-      background: linear-gradient(to right, #56ccf2, #2f80ed);
+    .btn-gradient {
+      background: linear-gradient(to right, #00b09b, #96c93d);
+      color: white;
       border: none;
+      transition: 0.3s ease;
     }
-
-    .btn-primary:hover {
-      background: linear-gradient(to right, #2f80ed, #56ccf2);
+    .btn-gradient:hover {
+      opacity: 0.85;
     }
-
-    .collapse .card-body {
-      animation: fadeIn 0.5s;
+    .fade-in {
+      animation: fadeIn 0.4s ease-in-out;
     }
-
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.25em 0.5em;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
 
-  <div class="container mt-5">
- <div class="d-flex justify-content-between align-items-center">
-  <h1><i class="bi bi-book"></i> Server Documentation</h1>
-    <p class="text-white">Explore the features, endpoints, and functionality of the application.</p>
- <a href="/login" class="btn btn-success">
-          <i class="bi bi-box-arrow-right"></i> Login
-        </a>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1><i class="bi bi-terminal"></i> WhatsApp Gateway API Docs</h1>
+      <p class="text-light">Complete reference for authentication, messaging, monitoring, and real-time communication.</p>
     </div>
+    <a href="/login" class="btn btn-light"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+  </div>
 
-    <!-- Overview -->
-    <div class="card text-white">
-      <div class="card-header">
-        <h2 class="h5"><i class="bi bi-info-circle"></i> Overview</h2>
-      </div>
-      <div class="card-body">
-        <p>This application is a WhatsApp management tool built with Express.js. It includes features like QR code generation, WebSocket communication, authentication, and real-time dashboard updates.</p>
-      </div>
+  <div class="card fade-in">
+    <div class="card-header">
+      <i class="bi bi-info-circle-fill"></i> System Overview
     </div>
-
-    <!-- Features Section -->
-    <div class="card text-white">
-      <div class="card-header">
-        <h2 class="h5"><i class="bi bi-lightning"></i> Features</h2>
-      </div>
-      <div class="card-body">
-        <ul>
-          <li>Real-time WhatsApp session management with QR code generation.</li>
-          <li>User authentication and session management.</li>
-          <li>REST API for sending notifications and fetching server status/logs.</li>
-          <li>WebSocket integration for live updates.</li>
-          <li>Graceful shutdown and reconnect functionality.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Endpoints Section -->
-    <div class="card text-white">
-      <div class="card-header">
-        <h2 class="h5"><i class="bi bi-code-slash"></i> API Endpoints</h2>
-      </div>
-      <div class="card-body">
-        <!-- QR Code Endpoint -->
-        <button class="btn btn-primary w-100 mb-3" data-bs-toggle="collapse" data-bs-target="#qrEndpoint">
-          <i class="bi bi-qr-code"></i> /qr Endpoint
-        </button>
-        <div class="collapse" id="qrEndpoint">
-          <div class="card-body">
-            <h5>GET /qr</h5>
-            <p>Fetches the latest QR code for WhatsApp authentication.</p>
-            <pre><code>{
-  "qr": "data:image/png;base64,..."
-}</code></pre>
-          </div>
-        </div>
-
-        <!-- Server Status Endpoint -->
-        <button class="btn btn-primary w-100 mb-3" data-bs-toggle="collapse" data-bs-target="#statusEndpoint">
-          <i class="bi bi-bar-chart"></i> /api/server-status
-        </button>
-        <div class="collapse" id="statusEndpoint">
-          <div class="card-body">
-            <h5>GET /api/server-status</h5>
-            <p>Fetches server uptime, memory usage, and WebSocket connections.</p>
-            <pre><code>{
-  "uptime": 12345,
-  "load": [0.12, 0.34, 0.56],
-  "memoryUsage": {
-    "rss": 12345678,
-    "heapTotal": 1234567,
-    "heapUsed": 123456
-  },
-  "connections": 5,
-  "status": "Connected"
-}</code></pre>
-          </div>
-        </div>
-
-        <!-- Send Notification Endpoint -->
-        <button class="btn btn-primary w-100 mb-3" data-bs-toggle="collapse" data-bs-target="#notificationEndpoint">
-          <i class="bi bi-send"></i> /send-notification Endpoint
-        </button>
-        <div class="collapse" id="notificationEndpoint">
-          <div class="card-body">
-            <h5>POST /send-notification</h5>
-            <p>Sends a message to a specified WhatsApp number.</p>
-            <pre><code>{
-  "phoneNumber": "+1234567890",
-  "message": "Hello, World!"
-}</code></pre>
-          </div>
-        </div>
-
-        <!-- Server Logs Endpoint -->
-        <button class="btn btn-primary w-100 mb-3" data-bs-toggle="collapse" data-bs-target="#logsEndpoint">
-          <i class="bi bi-file-earmark-text"></i> /api/server-logs Endpoint
-        </button>
-        <div class="collapse" id="logsEndpoint">
-          <div class="card-body">
-            <h5>GET /api/server-logs</h5>
-            <p>Fetches server logs for debugging and analysis.</p>
-            <pre><code>{
-  "logs": [
-    "Server started...",
-    "WhatsApp connected.",
-    "New message received."
-  ]
-}</code></pre>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Authentication -->
-    <div class="card text-white">
-      <div class="card-header">
-        <h2 class="h5"><i class="bi bi-shield-lock"></i> Authentication</h2>
-      </div>
-      <div class="card-body">
-        <p>Users must log in with valid credentials to access protected routes. Sessions are managed using `express-session`.</p>
-        <pre><code>POST /login
-{
-  "email": "admin@whatsapp.com",
-  "password": "admin123"
-}</code></pre>
-      </div>
+    <div class="card-body">
+      <p>This system allows you to manage WhatsApp Web sessions using the <code>whatsapp-web.js</code> library. It supports authentication, sending messages, real-time status updates through WebSocket, and server monitoring.</p>
     </div>
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="card fade-in">
+    <div class="card-header">
+      <i class="bi bi-stars"></i> Core Features
+    </div>
+    <div class="card-body">
+      <ul>
+        <li>QR code generation for WhatsApp login</li>
+        <li>Express-session based login system</li>
+        <li>Secure logout & reconnection cycle</li>
+        <li>Send text messages to WhatsApp users</li>
+        <li>Real-time WebSocket support for QR/status</li>
+        <li>RESTful monitoring APIs for uptime/logs</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-header">
+      <i class="bi bi-code-slash"></i> REST API Endpoints
+    </div>
+    <div class="card-body">
+
+      <h5>GET <code>/qr</code></h5>
+      <p>Fetch the base64 QR code for authentication if not yet connected.</p>
+      <pre>{ "qr": "data:image/png;base64,..." }</pre>
+
+      <h5 class="mt-4">GET <code>/api/server-status</code></h5>
+      <p>Returns current server runtime information and WhatsApp status.</p>
+      <pre>{
+  "uptime": 1234,
+  "memoryUsage": { ... },
+  "connections": 3,
+  "status": "Connected"
+}</pre>
+
+      <h5 class="mt-4">GET <code>/api/server-logs</code></h5>
+      <p>Returns recent log output as an array of strings.</p>
+      <pre>{
+  "logs": [
+    "Server started...",
+    "WhatsApp connected...",
+    "Message received..."
+  ]
+}</pre>
+
+      <h5 class="mt-4">POST <code>/send-notification</code></h5>
+      <p>Send a message to a specific WhatsApp number.</p>
+      <pre>{
+  "phoneNumber": "+6281234567890",
+  "message": "Hello from server!"
+}</pre>
+
+      <h5 class="mt-4">POST <code>/logout</code></h5>
+      <p>Terminate the current WhatsApp session and reconnect automatically.</p>
+      <pre>{ "status": "success", "message": "WhatsApp restarted" }</pre>
+    </div>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-header">
+      <i class="bi bi-lock-fill"></i> Authentication
+    </div>
+    <div class="card-body">
+      <p>To use any protected route, login is required.</p>
+      <h6>POST <code>/login</code></h6>
+      <pre>{
+  "email": "*@*.com",
+  "password": "*******"
+}</pre>
+      <p>Session is maintained using <code>express-session</code>. After login, access to <code>/dashboard</code>, <code>/send-notification</code>, etc. is granted.</p>
+    </div>
+  </div>
+
+  <div class="card fade-in">
+    <div class="card-header">
+      <i class="bi bi-wifi"></i> WebSocket Events
+    </div>
+    <div class="card-body">
+      <p>Connect to WebSocket endpoint:</p>
+      <pre>wss://yourdomain.com</pre>
+      <p>Listen for these events:</p>
+      <ul>
+        <li><strong>qr</strong>: Emits QR code in base64 when login is required</li>
+        <li><strong>status</strong>: Emits current connection status and active device list</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
