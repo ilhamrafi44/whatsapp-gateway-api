@@ -6,7 +6,7 @@ const { requireLogin } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 const users = [
-  { id: 1, email: 'admin@whatsapp.com', password: bcrypt.hashSync('admin123', 10) },
+  { id: 1, email: 'gateway@ptlidiadandy.com', password: bcrypt.hashSync('@Gateway#2025', 10) },
 ];
 
 router.get('/', requireLogin, (req, res) => res.redirect('/dashboard'));
